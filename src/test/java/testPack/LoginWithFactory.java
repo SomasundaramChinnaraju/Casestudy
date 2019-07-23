@@ -8,12 +8,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import org.testng.asserts.SoftAssert;
 
 import browserPack.UtilityClass;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import junit.framework.Assert;
 
 public class LoginWithFactory {
 	WebDriver driver;
@@ -84,13 +85,19 @@ public class LoginWithFactory {
 		WebDriverWait wait= new WebDriverWait(driver, 50);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.name("val")));
 		System.out.println("Logged in successfully");
+		driver.close();
 		
 	    //throw new PendingException();
 	}
+	// Case 3
 	@Given("^User providing informaion in search box$")
 	public void user_providing_informaion_in_search_box() throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
-		driver.findElement(By.xpath("//input[@id='myInput']")).click();
+		 driver=UtilityClass.browser("http://10.232.237.143:443/TestMeApp/login.htm");
+		 driver.findElement(By.name("userName")).sendKeys("lalitha");
+		    driver.findElement(By.name("password")).sendKeys("password123");
+		    driver.findElement(By.name("Login")).click();
+		 Assert.assertEquals(driver.getTitle(), "Home");
 		//driver.findElement(By.xpath("//input[@value='Login']")).click();
 	    //throw new PendingException();
 	}
@@ -99,7 +106,8 @@ public class LoginWithFactory {
 	public void user_enters_headphones_as_value_in_search_box() throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
 	    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-	    driver.findElement(By.xpath("//input[@id='myInput']")).sendKeys("head");
+	    driver.findElement(By.name("products")).sendKeys("Head");
+	    driver.findElement(By.xpath("//input[@value='FIND DETAILS']")).click();
 		
 		//throw new PendingException();
 	}
@@ -108,7 +116,39 @@ public class LoginWithFactory {
 	public void the_appropriate_product_is_displayed() throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		Assert.assertEquals(driver.getTitle(), "Search");
+		 System.out.println("search results are displayed");
 		driver.close();
 	    //throw new PendingException();
+	}
+	//Case 4
+	@Given("^User must be in the search page$")
+	public void user_must_be_in_the_search_page() throws Throwable {
+	    // Write code here that turns the phrase above into concrete actions
+		 driver=UtilityClass.browser("http://10.232.237.143:443/TestMeApp/login.htm");
+		 driver.findElement(By.name("userName")).sendKeys("lalitha");
+		    driver.findElement(By.name("password")).sendKeys("password123");
+		    driver.findElement(By.name("Login")).click();
+		    driver.findElement(By.name("products")).sendKeys("Head");
+		 driver.findElement(By.xpath("//input[@value='FIND DETAILS']")).click();
+		//throw new PendingException();
+	}
+
+	@When("^try to proceed to payment without adding any item$")
+	public void try_to_proceed_to_payment_without_adding_any_item() throws Throwable {
+	    // Write code here that turns the phrase above into concrete actions
+		 Assert.assertEquals(driver.getTitle(), "Search");
+		 driver.findElement(By.partialLinkText("Cart")).click();
+		 SoftAssert sa= new SoftAssert();
+		 sa.assertEquals(driver.getTitle(), "ViewCart");
+		//throw new PendingException();
+	}
+
+	@Then("^Testme app doesn't show the cart icon$")
+	public void testme_app_doesn_t_show_the_cart_icon() throws Throwable {
+	    // Write code here that turns the phrase above into concrete actions
+		System.out.println("TestMe app doesn't show the cart icon");
+	    driver.close();
+		//throw new PendingException();
 	}
 }

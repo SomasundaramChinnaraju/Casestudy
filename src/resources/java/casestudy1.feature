@@ -3,7 +3,7 @@ Feature: Testme Registration
   Scenario: registration
     Given the user is in the registration page of the browser application
 
-    When username "techon" ,firstname "tech" ,lastname "stud" ,password "password123" ,confirm password "password123" ,email "techon@gmail.com" ,mobilenumber "1234567890" ,DOB "08/04/2000" ,Address "12 San diago, united states" ,SecurityQuestion "Red" 
+    When username "techon1234" ,firstname "tech" ,lastname "stud" ,password "password123" ,confirm password "password123" ,email "techon@gmail.com" ,mobilenumber "1234567890" ,DOB "08/04/2000" ,Address "12 San diago, united states" ,SecurityQuestion "Red" 
     Then user must be redirected to the login page
     
     @login_outline
@@ -15,7 +15,14 @@ Examples:
 |username||password|
 |Lalitha||Password123|
 #Start Case 3
+@search
 Scenario: search function
 Given User providing informaion in search box
 When User enters headphones as value in search box
 Then the appropriate product is displayed
+
+@cart
+Scenario: Cart
+Given User must be in the search page
+When try to proceed to payment without adding any item 
+Then Testme app doesn't show the cart icon
